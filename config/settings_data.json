@@ -1,0 +1,47 @@
+{
+  "current": {
+    "primary_color": "#2B5741",
+    "secondary_color": "#E5A87F",
+    "text_color": "#333333",
+    "light_bg": "#F5F5F5",
+    "heading_font": "forta_n4",
+    "body_font": "inter_n4",
+    "base_font_size": 16,
+    "logo_height": 90,
+    "show_search": true,
+    "sticky_header": true,
+    "show_quantity_selector": true,
+    "show_variant_labels": true,
+    "show_subscription_option": true,
+    "subscription_discount": "15",
+    "sections": {
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {
+          "show_announcement": false,
+          "text": "Announce something here",
+          "background": "#2B5741",
+          "text_color": "#ffffff"
+        }
+      }
+    }
+  },
+  "presets": {
+    "Default": {
+      "primary_color": "#2B5741",
+      "secondary_color": "#E5A87F",
+      "text_color": "#333333",
+      "light_bg": "#F5F5F5",
+      "heading_font": "forta_n4",
+      "body_font": "inter_n4",
+      "base_font_size": 16,
+      "logo_height": 90,
+      "show_search": true,
+      "sticky_header": true,
+      "show_quantity_selector": true,
+      "show_variant_labels": true,
+      "show_subscription_option": true,
+      "subscription_discount": "15"
+    }
+  }
+} 

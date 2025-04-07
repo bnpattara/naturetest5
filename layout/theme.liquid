@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="{{ 'favicon.png' | asset_url }}">
+
+  <!-- Theme CSS -->
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+  <!-- Fonts -->
+  <style>
+    :root {
+      --primary-color: {{ settings.primary_color }};
+      --secondary-color: {{ settings.secondary_color }};
+      --text-color: {{ settings.text_color }};
+      --light-bg: {{ settings.light_bg }};
+      --max-width: 1200px;
+    }
+
+    body {
+      font-family: {{ settings.body_font.family }}, sans-serif;
+      font-weight: {{ settings.body_font.weight }};
+      font-style: {{ settings.body_font.style }};
+      font-size: {{ settings.base_font_size }}px;
+      color: var(--text-color);
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: {{ settings.heading_font.family }}, sans-serif;
+      font-weight: {{ settings.heading_font.weight }};
+      font-style: {{ settings.heading_font.style }};
+    }
+  </style>
+
+  <!-- Theme Scripts -->
+  {{ 'theme.js' | asset_url | script_tag }}
+  {{ 'cart-drawer.js' | asset_url | script_tag }}
+
+  <!-- Shopify-specific -->
+  {{ content_for_header }}
+</head>
+
+<body class="template-{{ template.name | handle }}">
+  <a class="skip-to-content-link" href="#MainContent">
+    {{ "accessibility.skip_to_text" | t }}
+  </a>
+
+  {% section 'announcement-bar' %}
+
+  <header class="header{% if settings.sticky_header %} header--sticky{% endif %}" role="banner">
+    <nav class="main-nav" role="navigation">
+      <div class="nav-left">
+        <a href="{{ routes.all_products_collection_url }}" class="nav-link">Shop</a>
+        <a href="{{ pages['about-us'].url }}" class="nav-link">About Us</a>
+        <a href="{{ pages['how-it-works'].url }}" class="nav-link">How It Works</a>
+      </div>
+
+      <div class="logo">
+        <a href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+          {% if settings.logo != blank %}
+            <img 
+              src="{{ settings.logo | image_url: width: 200 }}"
+              alt="{{ shop.name }}"
+              width="{{ settings.logo_height }}"
+              height="auto"
+              loading="eager"
+            >
+          {% else %}
+            <span class="h2">{{ shop.name }}</span>
+          {% endif %}
+        </a>
+      </div>
+
+      <div class="nav-right">
+        <a href="{{ pages['journal'].url }}" class="nav-link">Journal</a>
+        <a href="{{ pages['faq'].url }}" class="nav-link">FAQ</a>
+        <a href="{{ pages['contact'].url }}" class="nav-link">Contact</a>
+        <a href="{{ routes.cart_url }}" class="nav-link cart-link" aria-label="{{ 'cart.general.title' | t }}">
+          {% render 'icon-cart' %}
+          <span class="cart-count" data-cart-count>
+            {{ cart.item_count }}
+          </span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="MainContent" class="main-content" role="main">
+    {{ content_for_layout }}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-logo">
+        {% if settings.logo != blank %}
+          <img 
+            src="{{ settings.logo | image_url: width: 150 }}"
+            alt="{{ shop.name }}"
+            width="150"
+            height="auto"
+            loading="lazy"
+          >
+        {% else %}
+          <span class="h2">{{ shop.name }}</span>
+        {% endif %}
+        <p>Sustainable hygiene products for the wild at heart. Eco-friendly, biodegradable, and perfect for your adventures.</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-column">
+          <h4>Shop</h4>
+          <a href="{{ collections['buff-wipes'].url }}">Buff Wipes</a>
+          <a href="{{ collections['soap-bars'].url }}">Soap Bars</a>
+          <a href="{{ routes.all_products_collection_url }}">All Products</a>
+        </div>
+
+        <div class="footer-column">
+          <h4>About</h4>
+          <a href="{{ pages['our-story'].url }}">Our Story</a>
+          <a href="{{ pages['sustainability'].url }}">Sustainability</a>
+          <a href="{{ pages['meet-the-team'].url }}">Meet the Team</a>
+        </div>
+
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="{{ pages['journal'].url }}">Journal</a>
+          <a href="{{ pages['faq'].url }}">FAQ</a>
+          <a href="{{ pages['contact'].url }}">Contact Us</a>
+        </div>
+
+        <div class="footer-column">
+          <h4>Connect</h4>
+          <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener">Instagram</a>
+          <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener">Twitter</a>
+          <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener">Facebook</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Handle sticky header
+    if (document.querySelector('.header--sticky')) {
+      let lastScroll = 0;
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        const header = document.querySelector('.header');
+        
+        if (currentScroll <= 0) {
+          header.classList.remove('header--hidden');
+          return;
+        }
+        
+        if (currentScroll > lastScroll && !header.classList.contains('header--hidden')) {
+          header.classList.add('header--hidden');
+        } else if (currentScroll < lastScroll && header.classList.contains('header--hidden')) {
+          header.classList.remove('header--hidden');
+        }
+        
+        lastScroll = currentScroll;
+      });
+    }
+  </script>
+</body>
+</html> 

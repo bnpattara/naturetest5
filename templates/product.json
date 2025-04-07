@@ -1,0 +1,16 @@
+{
+  "name": "Product",
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "enable_zoom": true,
+        "enable_video": true,
+        "gallery_layout": "thumbnails"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+} 

@@ -1,0 +1,125 @@
+{%- style -%}
+.newsletter {
+  padding: 80px 0;
+  background-color: #E4A853;
+  color: white;
+  text-align: center;
+}
+
+.section-header {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-family: 'Forta', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.section-description {
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+
+.newsletter-form {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+  padding: 0 20px;
+}
+
+.newsletter-form__input {
+  flex-grow: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.newsletter-form__button {
+  padding: 12px 30px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.newsletter-form__button:hover {
+  background-color: #1e3d2d;
+}
+
+@media screen and (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .newsletter-form {
+    flex-direction: column;
+  }
+
+  .newsletter-form__input,
+  .newsletter-form__button {
+    width: 100%;
+  }
+}
+{%- endstyle -%}
+
+<div class="newsletter">
+  <div class="section-header">
+    <h2 class="section-title">{{ section.settings.title }}</h2>
+    <p class="section-description">{{ section.settings.description }}</p>
+  </div>
+
+  {% form 'customer', class: 'newsletter-form' %}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    <input
+      type="email"
+      name="contact[email]"
+      class="newsletter-form__input"
+      value="{{ form.email }}"
+      placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+      required
+    >
+    <button type="submit" class="newsletter-form__button">
+      {{ section.settings.button_label }}
+    </button>
+  {% endform %}
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Join the NatureBuff Community"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description",
+      "default": "Subscribe to our newsletter for sustainable living tips, new product announcements, and exclusive offers."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Subscribe"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %} 

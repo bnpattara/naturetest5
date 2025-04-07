@@ -1,0 +1,242 @@
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
+<div class="product-page">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" role="navigation" aria-label="breadcrumbs">
+    <a href="{{ routes.root_url }}" title="{{ 'general.breadcrumbs.home' | t }}">{{ 'general.breadcrumbs.home' | t }}</a>
+    <span>/</span>
+    <a href="{{ routes.collections_url }}/{{product.collection.handle}}">{{ product.collection.title }}</a>
+    <span>/</span>
+    <span>{{ product.title }}</span>
+  </nav>
+
+  <div class="product-details">
+    <!-- Product Images -->
+    <div class="product-images">
+      <div class="main-image">
+        {{ current_variant.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: current_variant.featured_image.alt }}
+      </div>
+      {% if product.images.size > 1 %}
+        <div class="image-thumbnails">
+          {% for image in product.images %}
+            <img 
+              src="{{ image | image_url: width: 150 }}" 
+              alt="{{ image.alt | escape }}"
+              loading="lazy"
+              class="{% if forloop.first %}active{% endif %}"
+              data-image-id="{{ image.id }}"
+              onclick="updateMainImage(this)"
+            >
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Product Info -->
+    <div class="product-info">
+      <h1>{{ product.title }}</h1>
+      
+      {% if product.metafields.reviews.rating %}
+        <div class="product-rating">
+          <div class="stars" style="--rating: {{ product.metafields.reviews.rating.value }}">★★★★★</div>
+          <span>({{ product.metafields.reviews.rating_count }} {{ 'products.product.reviews' | t }})</span>
+        </div>
+      {% endif %}
+
+      <div class="product-price">
+        <span class="price" data-regular-price>
+          {{ current_variant.price | money }}
+        </span>
+        {% if settings.show_subscription_option %}
+          <span class="subscription-text">
+            {{ 'products.product.subscription_text' | t: discount: settings.subscription_discount }}
+          </span>
+        {% endif %}
+      </div>
+
+      <p class="product-description">
+        {{ product.description }}
+      </p>
+
+      <form method="post" action="/cart/add" id="product_form_{{ product.id }}" accept-charset="UTF-8" class="product-form" enctype="multipart/form-data">
+        <input type="hidden" name="form_type" value="product">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+        {% for option in product.options_with_values %}
+          {% if settings.show_variant_labels %}
+            <div class="product-options">
+              <h3>{{ option.name }}</h3>
+              <div class="option-buttons" data-option-index="{{ forloop.index0 }}">
+                {% for value in option.values %}
+                  <button 
+                    type="button"
+                    class="option-btn{% if option.selected_value == value %} active{% endif %}"
+                    data-value="{{ value | escape }}"
+                    {% if option.name == "Color" %}
+                      style="background-color: {{ value | downcase }}"
+                    {% endif %}
+                  >
+                    {{ value }}
+                  </button>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+        {% if settings.show_quantity_selector %}
+          <div class="quantity-selector">
+            <h3>{{ 'products.product.quantity' | t }}</h3>
+            <div class="quantity-controls">
+              <button type="button" class="quantity-btn" onclick="updateQuantity(-1)">-</button>
+              <input type="number" name="quantity" value="1" min="1" pattern="[0-9]*">
+              <button type="button" class="quantity-btn" onclick="updateQuantity(1)">+</button>
+            </div>
+          </div>
+        {% endif %}
+
+        <button 
+          type="submit" 
+          name="add" 
+          class="add-to-cart"
+          {% unless current_variant.available %}disabled{% endunless %}
+        >
+          {% if current_variant.available %}
+            {{ 'products.product.add_to_cart' | t }}
+          {% else %}
+            {{ 'products.product.sold_out' | t }}
+          {% endif %}
+        </button>
+
+        {% if settings.show_subscription_option %}
+          <button type="button" class="subscribe-save" onclick="handleSubscription()">
+            {{ 'products.product.subscribe_save' | t: discount: settings.subscription_discount }}
+          </button>
+        {% endif %}
+      </form>
+
+      <!-- Product Features -->
+      {% if product.metafields.custom.features %}
+        <div class="product-features">
+          {% for feature in product.metafields.custom.features.value %}
+            <div class="feature-item">
+              {% if feature.icon %}
+                <img src="{{ feature.icon | image_url }}" alt="{{ feature.text }}">
+              {% endif %}
+              <span>{{ feature.text }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "Enable Image Zoom",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video",
+      "label": "Enable Product Video",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "gallery_layout",
+      "label": "Gallery Layout",
+      "options": [
+        {
+          "value": "thumbnails",
+          "label": "Thumbnails"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "slider",
+          "label": "Slider"
+        }
+      ],
+      "default": "thumbnails"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% javascript %}
+function updateMainImage(thumbnail) {
+  const mainImage = document.querySelector('.main-image img');
+  mainImage.src = thumbnail.src.replace('_150x', '_800x');
+  mainImage.alt = thumbnail.alt;
+  
+  document.querySelectorAll('.image-thumbnails img').forEach(thumb => {
+    thumb.classList.remove('active');
+  });
+  thumbnail.classList.add('active');
+}
+
+function updateQuantity(change) {
+  const input = document.querySelector('input[name="quantity"]');
+  const newValue = Math.max(1, parseInt(input.value) + change);
+  input.value = newValue;
+}
+
+function handleSubscription() {
+  // Implement subscription logic
+}
+
+// Variant selection
+document.querySelectorAll('.option-buttons').forEach(container => {
+  container.querySelectorAll('.option-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const optionIndex = container.dataset.optionIndex;
+      const value = button.dataset.value;
+      
+      // Update button states
+      container.querySelectorAll('.option-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      button.classList.add('active');
+      
+      // Update hidden variant selector
+      const selector = document.querySelector(`#SingleOptionSelector-${optionIndex}`);
+      if (selector) {
+        selector.value = value;
+        selector.dispatchEvent(new Event('change'));
+      }
+    });
+  });
+});
+{% endjavascript %}
+
+{% stylesheet %}
+/* Add any section-specific styles here */
+{% endstylesheet %} 

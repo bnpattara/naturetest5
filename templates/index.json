@@ -1,0 +1,49 @@
+{
+  "name": "Homepage",
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "heading": "Sustainable Hygiene for the Wild at Heart",
+        "subheading": "Eco-friendly, biodegradable products that keep you fresh without harming the planet.",
+        "button_label": "Shop Now",
+        "button_link": "/collections/all"
+      }
+    },
+    "featured_products": {
+      "type": "featured-products",
+      "settings": {
+        "title": "Our Products",
+        "description": "Discover our range of sustainable hygiene products designed for adventurers, travelers, and eco-conscious individuals."
+      }
+    },
+    "features": {
+      "type": "feature-columns",
+      "settings": {
+        "title": "Why NatureBuff?",
+        "description": "We believe that staying clean shouldn't come at the planet's expense. Our products are designed with both performance and sustainability in mind."
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "title": "What Our Customers Say",
+        "description": "Join our community of nature lovers who've made the switch to sustainable hygiene."
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "title": "Join the NatureBuff Community",
+        "description": "Subscribe to our newsletter for sustainable living tips, new product announcements, and exclusive offers."
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured_products",
+    "features",
+    "testimonials",
+    "newsletter"
+  ]
+} 

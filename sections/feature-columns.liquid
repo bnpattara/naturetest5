@@ -1,0 +1,159 @@
+{%- style -%}
+.features {
+  padding: 80px 0;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.section-header {
+  margin-bottom: 60px;
+}
+
+.section-title {
+  font-family: 'Forta', sans-serif;
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.section-description {
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.feature {
+  text-align: center;
+}
+
+.feature__icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+}
+
+.feature__icon svg {
+  width: 100%;
+  height: 100%;
+  fill: var(--primary-color);
+}
+
+.feature__title {
+  font-family: 'Forta', sans-serif;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.feature__description {
+  color: #666;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+@media screen and (max-width: 990px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+}
+{%- endstyle -%}
+
+<div class="features">
+  <div class="section-header">
+    <h2 class="section-title">{{ section.settings.title }}</h2>
+    <p class="section-description">{{ section.settings.description }}</p>
+  </div>
+
+  <div class="features-grid">
+    {%- for block in section.blocks -%}
+      <div class="feature">
+        <div class="feature__icon">
+          {{ block.settings.icon }}
+        </div>
+        <h3 class="feature__title">{{ block.settings.title }}</h3>
+        <p class="feature__description">{{ block.settings.description }}</p>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Feature Columns",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Why NatureBuff?"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description",
+      "default": "We believe that staying clean shouldn't come at the planet's expense. Our products are designed with both performance and sustainability in mind."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "html",
+          "id": "icon",
+          "label": "Icon (SVG)",
+          "info": "Paste your SVG code here"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Feature description goes here"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature Columns",
+      "blocks": [
+        {
+          "type": "feature"
+        },
+        {
+          "type": "feature"
+        },
+        {
+          "type": "feature"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %} 

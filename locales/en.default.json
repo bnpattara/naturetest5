@@ -1,0 +1,39 @@
+{
+  "general": {
+    "breadcrumbs": {
+      "home": "Home",
+      "collections": "Collections"
+    },
+    "search": {
+      "search": "Search",
+      "placeholder": "Search our store",
+      "submit": "Search",
+      "close": "Close search"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to Cart",
+      "sold_out": "Sold Out",
+      "quantity": "Quantity",
+      "reviews": "reviews",
+      "subscription_text": "or subscribe and save {discount}% ({price} / pack)",
+      "subscribe_save": "Subscribe & Save {discount}%",
+      "features": {
+        "biodegradable": "100% biodegradable bamboo fiber",
+        "breakdown": "Breaks down naturally in 4-6 weeks",
+        "chemical_free": "Free from harsh chemicals, alcohol, and synthetic fragrances",
+        "free_shipping": "Free shipping on orders over $35"
+      }
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Cart",
+      "empty": "Your cart is empty",
+      "subtotal": "Subtotal",
+      "shipping_at_checkout": "Shipping & taxes calculated at checkout",
+      "checkout": "Checkout"
+    }
+  }
+} 

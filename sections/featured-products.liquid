@@ -1,0 +1,234 @@
+{%- style -%}
+.featured-products {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.section-header {
+  margin-bottom: 60px;
+}
+
+.section-title {
+  font-family: 'Forta', sans-serif;
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.section-description {
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.product-category {
+  background: #f5f5f5;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.product-category__image {
+  position: relative;
+  padding-bottom: 100%;
+  background: #e0e0e0;
+}
+
+.product-category__image img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-category__content {
+  padding: 20px;
+}
+
+.product-category__title {
+  font-family: 'Forta', sans-serif;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.product-category__description {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.product-category__button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.product-category__button:hover {
+  background-color: #1e3d2d;
+}
+
+.notify-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: transparent;
+  color: var(--primary-color);
+  text-decoration: none;
+  border: 2px solid var(--primary-color);
+  border-radius: 25px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.notify-button:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+@media screen and (max-width: 990px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+}
+{%- endstyle -%}
+
+<div class="featured-products">
+  <div class="section-header">
+    <h2 class="section-title">{{ section.settings.title }}</h2>
+    <p class="section-description">{{ section.settings.description }}</p>
+  </div>
+
+  <div class="products-grid">
+    {%- for block in section.blocks -%}
+      <div class="product-category">
+        <div class="product-category__image">
+          <img
+            src="{{ block.settings.image | img_url: '600x600', crop: 'center' }}"
+            alt="{{ block.settings.title }}"
+            loading="lazy"
+          >
+        </div>
+        <div class="product-category__content">
+          <h3 class="product-category__title">{{ block.settings.title }}</h3>
+          <p class="product-category__description">{{ block.settings.description }}</p>
+          {%- if block.settings.button_label != blank -%}
+            <a href="{{ block.settings.button_link }}" class="product-category__button">
+              {{ block.settings.button_label }}
+            </a>
+          {%- endif -%}
+          {%- if block.settings.notify_label != blank -%}
+            <a href="{{ block.settings.notify_link }}" class="notify-button">
+              {{ block.settings.notify_label }}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Our Products"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description",
+      "default": "Discover our range of sustainable hygiene products designed for adventurers, travelers, and eco-conscious individuals."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Product Category",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Category Title"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Category description goes here"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "text",
+          "id": "notify_label",
+          "label": "Notify Button Label"
+        },
+        {
+          "type": "url",
+          "id": "notify_link",
+          "label": "Notify Button Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products",
+      "blocks": [
+        {
+          "type": "category"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "category"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %} 

@@ -1,0 +1,45 @@
+{{ 'product-template.css' | asset_url | stylesheet_tag }}
+
+<div class="product-template">
+  {% render 'product-template' %}
+</div>
+
+{% schema %}
+{
+  "name": "Product pages",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "Enable Image Zoom",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video",
+      "label": "Enable Product Video",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "gallery_layout",
+      "label": "Gallery Layout",
+      "options": [
+        {
+          "value": "thumbnails",
+          "label": "Thumbnails"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "slider",
+          "label": "Slider"
+        }
+      ],
+      "default": "thumbnails"
+    }
+  ]
+}
+{% endschema %} 

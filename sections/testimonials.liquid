@@ -1,0 +1,186 @@
+{%- style -%}
+.testimonials {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.section-header {
+  margin-bottom: 60px;
+}
+
+.section-title {
+  font-family: 'Forta', sans-serif;
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.section-description {
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.testimonial {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: left;
+}
+
+.testimonial__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.testimonial__avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: 'Forta', sans-serif;
+  font-size: 1.2rem;
+}
+
+.testimonial__info h3 {
+  font-family: 'Forta', sans-serif;
+  color: var(--primary-color);
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.testimonial__info p {
+  color: #666;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.testimonial__content {
+  color: #333;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.testimonial__content p {
+  margin: 0;
+}
+
+@media screen and (max-width: 990px) {
+  .testimonials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+}
+{%- endstyle -%}
+
+<div class="testimonials">
+  <div class="section-header">
+    <h2 class="section-title">{{ section.settings.title }}</h2>
+    <p class="section-description">{{ section.settings.description }}</p>
+  </div>
+
+  <div class="testimonials-grid">
+    {%- for block in section.blocks -%}
+      <div class="testimonial">
+        <div class="testimonial__header">
+          <div class="testimonial__avatar">
+            {{ block.settings.name | slice: 0 | upcase }}
+          </div>
+          <div class="testimonial__info">
+            <h3>{{ block.settings.name }}</h3>
+            <p>{{ block.settings.title }}</p>
+          </div>
+        </div>
+        <div class="testimonial__content">
+          <p>{{ block.settings.content }}</p>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description",
+      "default": "Join our community of nature lovers who've made the switch to sustainable hygiene."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Customer Name"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Happy Customer"
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "Testimonial",
+          "default": "Share what you think about our products"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %} 
